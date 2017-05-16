@@ -5,7 +5,7 @@ module InferredCrumpets
     end
 
     module ClassMethods
-      def inferred_crumbs_for(*args)
+      def infer_crumbs_for(*args)
         options = args.extract_options!
         parents = Array(options.delete(:through) || [])
         subject = args.first
