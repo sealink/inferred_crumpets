@@ -2,6 +2,13 @@ module InferredCrumpets
   class Builder
     attr_reader :view_context, :subject, :parents
 
+    def self.build_inferred_crumbs!(view_context)
+      subject = view_context.current_object rescue view_context.collection rescue nil
+      return unless subject
+      parents = [view_context.parent_object].compact
+      build_all!(view_context, subject, parents)
+    end
+
     def self.build_all!(view_context, subject, parents = [])
       new(view_context, subject, parents).build_all!
     end
@@ -17,7 +24,7 @@ module InferredCrumpets
     end
 
     def build_all!
-      build_crumb_for_parents!
+      build_crumbs_for_parents!
       build_crumb_for_collection!
       build_crumb_for_action!
     end
@@ -28,7 +35,7 @@ module InferredCrumpets
 
     private
 
-    def build_crumb_for_parents!
+    def build_crumbs_for_parents!
       parents.each do |parent|
         Builder.build_single!(view_context, parent)
       end
@@ -36,22 +43,19 @@ module InferredCrumpets
 
     def build_crumb_for_collection!
       if action == 'index'
-        Crumpet.crumbs.add_crumb view_context.params[:controller].titleize
+        Crumpet.crumbs.add_crumb subject_name.pluralize.titleize
       else
         Crumpet.crumbs.add_crumb subject.class.table_name.titleize, url_for_collection
       end
     end
 
     def build_crumb_for_action!
-      case action
-      when 'new'
+      if %w(new create).include?(action)
         Crumpet.crumbs.add_crumb 'New', wrapper_options: { class: 'active' }
-      when 'edit'
+      elsif %w(edit update).include?(action)
         build_crumb_for_subject!
         Crumpet.crumbs.add_crumb 'Edit', wrapper_options: { class: 'active' }
-      when 'index'
-        nil
-      else
+      elsif action != 'index'
         build_crumb_for_subject!
       end
     end
@@ -61,32 +65,42 @@ module InferredCrumpets
     end
 
     def url_for_subject
-      return unless can_show?
-      view_context.polymorphic_url(subject_with_parents)
-    rescue NoMethodError
-      subject_becomes!
-      view_context.polymorphic_url(subject_with_parents)
+      return unless can_route?(:show, id: subject.id)
+      view_context.url_for(shallow? ? subject : subject_with_parents)
     end
 
     def url_for_collection
-      view_context.polymorphic_url(class_with_parents)
-    rescue NoMethodError
-      subject_becomes!
-      view_context.polymorphic_url(class_with_parents)
+      return view_context.objects_path if view_context.objects_path.present?
+      return unless can_route?(:index)
+      view_context.url_for(class_with_parents)
     end
 
-    def can_show?
-      view_context.url_for(
-        action:     :show,
+    def subject_requires_transformation?
+      subject.respond_to?(:becomes) && view_context.url_for((parents + [subject.class]).compact).blank?
+    rescue NoMethodError
+      true
+    end
+
+    def transformed_subject
+      subject_requires_transformation? ? subject.becomes(subject.class.base_class) : subject
+    end
+
+    def shallow?
+      view_context.url_for(subject)
+    rescue NoMethodError
+      false
+    end
+
+    def can_route?(action, params = {})
+      view_context.url_for({
+        action:     action,
         controller: subject.class.table_name,
-        id:         subject.id,
-      )
+      }.merge(params))
     rescue ActionController::RoutingError
       false
     end
 
     def action
-      return 'new' if subject && subject.new_record?
       view_context.params[:action]
     end
 
@@ -95,20 +109,11 @@ module InferredCrumpets
     end
 
     def class_with_parents
-      (parents + [subject.class]).compact
+      (parents + [transformed_subject.class]).compact
     end
 
     def subject_with_parents
-      (parents + [subject]).compact
-    end
-
-    def subject_becomes!
-      @subject = subject.becomes subject.class.base_class
-    end
-
-    def namespaces
-      return [] unless view_context.respond_to?(:namespaces)
-      Array(view_context.namespaces)
+      (parents + [transformed_subject]).compact
     end
 
     def inherited_resources?
