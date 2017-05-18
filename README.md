@@ -18,32 +18,7 @@ And then execute:
 
 ## Usage
 
-Basic usage:
-
-```ruby
-class ApplicationController
-  crumbs do
-    add_crumb "Home", root_path
-  end
-end
-
-class WidgetsController < ApplicationController
-  before_action :load_widget
-  before_action :load_parent
-
-  infer_crumbs_for :widget, through: :parent_widget
-
-  private
-
-  def load_widget
-    @widget = Widget.find(params[:id])
-  end
-
-  def load_parent
-    @parent_widget = @widget.parent_widget
-  end
-end
-```
+In the view call `render_inferred_crumbs`
 
 ## Development
 
