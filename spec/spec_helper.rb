@@ -1,4 +1,8 @@
 require "bundler/setup"
+require "rails"
+require "action_controller"
+require "action_view"
+require "crumpet"
 require "inferred_crumpets"
 
 RSpec.configure do |config|
