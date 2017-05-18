@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sealink/inferred_crumpets.svg?branch=master)](https://travis-ci.org/sealink/inferred_crumpets)
 
-Automatic breadcrumbs for Rails.
+Automatic breadcrumbs for Rails. Built with [crumpet](https://github.com/blaknite/crumpet).
 
 ## Installation
 
