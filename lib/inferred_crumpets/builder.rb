@@ -5,7 +5,7 @@ module InferredCrumpets
     def self.build_inferred_crumbs!(view_context)
       subject = view_context.current_object rescue view_context.collection rescue nil
       return unless subject
-      parents = [view_context.parent_object].compact
+      parents = [view_context.parent_object].compact rescue []
       build_all!(view_context, subject, parents)
     end
 
@@ -42,21 +42,24 @@ module InferredCrumpets
     end
 
     def build_crumb_for_collection!
-      if action == 'index'
+      if subject.is_a?(ActiveRecord::Relation)
         view_context.crumbs.add_crumb subject_name.pluralize.titleize
-      else
+      elsif subject.is_a?(ActiveRecord::Base)
         view_context.crumbs.add_crumb subject.class.table_name.titleize, url_for_collection
       end
     end
 
     def build_crumb_for_action!
+      return unless subject.is_a?(ActiveRecord::Base)
+
       if %w(new create).include?(action)
-        view_context.crumbs.add_crumb 'New', wrapper_options: { class: 'active' }
-      elsif %w(edit update).include?(action)
-        build_crumb_for_subject!
-        view_context.crumbs.add_crumb 'Edit', wrapper_options: { class: 'active' }
-      elsif action != 'index'
-        build_crumb_for_subject!
+        view_context.crumbs.add_crumb('New', wrapper_options: { class: 'active' })
+        return
+      end
+
+      build_crumb_for_subject!
+      if %w(edit update).include?(action)
+        view_context.crumbs.add_crumb('Edit', wrapper_options: { class: 'active' })
       end
     end
 
