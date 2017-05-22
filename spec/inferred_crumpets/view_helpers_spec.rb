@@ -57,7 +57,7 @@ RSpec.describe InferredCrumpets::ViewHelpers do
       let(:user) { double(:user, id: id, name: nil, to_s: 'Alice', new_record?: new_record, class: user_class) }
 
       before do
-        Crumpet.crumbs.clear
+        view_context.crumbs.clear
         allow(view_context).to receive(:collection).and_return(users)
       end
 

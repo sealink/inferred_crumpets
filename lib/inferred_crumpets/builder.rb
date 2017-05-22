@@ -43,25 +43,25 @@ module InferredCrumpets
 
     def build_crumb_for_collection!
       if action == 'index'
-        Crumpet.crumbs.add_crumb subject_name.pluralize.titleize
+        view_context.crumbs.add_crumb subject_name.pluralize.titleize
       else
-        Crumpet.crumbs.add_crumb subject.class.table_name.titleize, url_for_collection
+        view_context.crumbs.add_crumb subject.class.table_name.titleize, url_for_collection
       end
     end
 
     def build_crumb_for_action!
       if %w(new create).include?(action)
-        Crumpet.crumbs.add_crumb 'New', wrapper_options: { class: 'active' }
+        view_context.crumbs.add_crumb 'New', wrapper_options: { class: 'active' }
       elsif %w(edit update).include?(action)
         build_crumb_for_subject!
-        Crumpet.crumbs.add_crumb 'Edit', wrapper_options: { class: 'active' }
+        view_context.crumbs.add_crumb 'Edit', wrapper_options: { class: 'active' }
       elsif action != 'index'
         build_crumb_for_subject!
       end
     end
 
     def build_crumb_for_subject!
-      Crumpet.crumbs.add_crumb(subject_name, url_for_subject)
+      view_context.crumbs.add_crumb(subject_name, url_for_subject)
     end
 
     def url_for_subject
