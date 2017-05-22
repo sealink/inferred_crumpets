@@ -19,7 +19,7 @@ RSpec.describe InferredCrumpets::ViewHelpers do
     }
 
     let(:view_context) { MockView.new(:action => action) }
-    let(:objects_path) { '/users' }
+    # let(:objects_path) { '/users' }
     let(:parent) { nil }
     let(:new_record) { false }
     let(:id) { new_record ? nil : 1 }
@@ -35,15 +35,21 @@ RSpec.describe InferredCrumpets::ViewHelpers do
       end
 
       stub_const 'MockView', mock_view_class
+
+      module ActiveRecord
+        class Base; end
+        class Relation; end
+      end
+
       stub_const 'ActionController::RoutingError', StandardError
 
-      allow(view_context).to receive(:objects_path) { objects_path }
-      allow(view_context).to receive(:collection_url) { objects_path }
-
-      allow(view_context).to receive(:parent) { parent }
-      allow(view_context).to receive(:parent_object) { parent }
+      allow(view_context).to receive(:objects_path) { nil }
+      allow(view_context).to receive(:collection_url) { nil }
 
       allow(view_context).to receive(:controller) { double(:controller, :show => nil) }
+      allow(view_context).to receive(:url_for).with([user_class]).and_return('/users')
+      allow(view_context).to receive(:url_for).with(users).and_return('/users')
+      allow(view_context).to receive(:url_for).with(action: :index, controller: 'users').and_return('/users')
       allow(view_context).to receive(:url_for).with(user).and_return('/users/1')
       allow(view_context).to receive(:url_for).with(action: :show, controller: 'users', id: 1).and_return('/users/1')
     end
@@ -52,17 +58,30 @@ RSpec.describe InferredCrumpets::ViewHelpers do
     describe '#build_inferred_crumbs!' do
       subject { view_context.render_inferred_crumbs }
 
-      let(:user_class) { double(:user_class, table_name: 'users', name: nil) }
-      let(:users) { double(:users, class: user_class, to_s: 'User') }
-      let(:user) { double(:user, id: id, name: nil, to_s: 'Alice', new_record?: new_record, class: user_class) }
+      let(:user_class) { ActiveRecord::Base }
+      let(:users) { ActiveRecord::Relation.new }
+      let(:user) { ActiveRecord::Base.new }
 
       before do
-        view_context.crumbs.clear
-        allow(view_context).to receive(:collection).and_return(users)
+        allow(user_class).to receive(:table_name).and_return('users')
+        allow(user_class).to receive(:name).and_return(nil)
+
+        allow(users).to receive(:class).and_return(user_class)
+        allow(users).to receive(:to_s).and_return('User')
+
+        allow(user).to receive(:id).and_return(id)
+        allow(user).to receive(:name).and_return(nil)
+        allow(user).to receive(:to_s).and_return('Alice')
+        allow(user).to receive(:new_record?).and_return(new_record)
+        allow(user).to receive(:class).and_return(user_class)
       end
 
       context 'for the index' do
         let(:action) { 'index' }
+
+        before do
+          allow(view_context).to receive(:collection).and_return(users)
+        end
 
         it 'should infer crumbs: Users' do
           expect(subject).to eq '<ul class="breadcrumb"><li><span>Users</span></li></ul>'
@@ -73,6 +92,13 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         let(:action) { 'new' }
         let(:new_record) { true }
 
+        before do
+          allow(view_context).to receive(:collection).and_return(users)
+          allow(view_context).to receive(:current_object).and_return(user)
+          allow(view_context).to receive(:parent) { parent }
+          allow(view_context).to receive(:parent_object) { parent }
+        end
+
         it 'should infer crumbs: Users / New' do
           expect(subject).to eq '<ul class="breadcrumb"><li><a href="/users">Users</a></li><li class="active"><span>New</span></li></ul>'
         end
@@ -82,7 +108,10 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         let(:action) { 'show' }
 
         before do
+          allow(view_context).to receive(:collection).and_return(users)
           allow(view_context).to receive(:current_object).and_return(user)
+          # allow(view_context).to receive(:parent) { parent }
+          # allow(view_context).to receive(:parent_object) { parent }
         end
 
         it 'should infer crumbs: Users / Alice' do
