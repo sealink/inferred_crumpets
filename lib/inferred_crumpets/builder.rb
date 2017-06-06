@@ -42,6 +42,8 @@ module InferredCrumpets
     end
 
     def build_crumb_for_collection!
+      return if parents.present? && shallow?
+
       if subject.is_a?(ActiveRecord::Relation)
         view_context.crumbs.add_crumb subject_name.pluralize.titleize
       elsif subject.is_a?(ActiveRecord::Base)
@@ -69,13 +71,13 @@ module InferredCrumpets
 
     def url_for_subject
       return unless can_route?(:show, id: subject.id)
-      view_context.url_for(shallow? ? subject : subject_with_parents)
+      view_context.url_for(shallow? ? transformed_subject : subject_with_parents)
     end
 
     def url_for_collection
       return view_context.objects_path if view_context.objects_path.present?
       return unless can_route?(:index)
-      view_context.url_for(class_with_parents)
+      view_context.url_for(shallow? ? transformed_subject.class : class_with_parents)
     end
 
     def subject_requires_transformation?
@@ -89,7 +91,7 @@ module InferredCrumpets
     end
 
     def shallow?
-      view_context.url_for(subject)
+      view_context.url_for(transformed_subject)
     rescue NoMethodError
       false
     end
