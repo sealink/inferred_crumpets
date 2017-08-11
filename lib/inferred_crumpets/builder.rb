@@ -52,6 +52,7 @@ module InferredCrumpets
     end
 
     def build_crumb_for_action!
+      return unless linkable?
       return unless subject.is_a?(ActiveRecord::Base)
 
       if %w(new create).include?(action)
@@ -92,6 +93,12 @@ module InferredCrumpets
 
     def shallow?
       view_context.url_for(transformed_subject)
+    rescue NoMethodError
+      false
+    end
+
+    def linkable?
+      view_context.url_for(subject)
     rescue NoMethodError
       false
     end
