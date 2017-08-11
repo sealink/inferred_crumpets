@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## 0.2.1
+
+* [TT-2850] Fix: Don't link to actions that have no url
+
 ## 0.2.0
 
 * Fix: shallow routes no longer cause a routing error
