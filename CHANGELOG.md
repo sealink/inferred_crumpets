@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## 0.2.2
+
+* [TT-3102] Fix: Show subject crumb even when action is not linkable
+
 ## 0.2.1
 
 * [TT-2850] Fix: Don't link to actions that have no url
