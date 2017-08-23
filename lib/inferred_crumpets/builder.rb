@@ -52,16 +52,15 @@ module InferredCrumpets
     end
 
     def build_crumb_for_action!
-      return unless linkable?
       return unless subject.is_a?(ActiveRecord::Base)
 
-      if %w(new create).include?(action)
+      if %w(new create).include?(action) && linkable?
         view_context.crumbs.add_crumb('New', wrapper_options: { class: 'active' })
         return
       end
 
       build_crumb_for_subject!
-      if %w(edit update).include?(action)
+      if %w(edit update).include?(action) && linkable?
         view_context.crumbs.add_crumb('Edit', wrapper_options: { class: 'active' })
       end
     end
