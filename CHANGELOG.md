@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## Unreleased
+## 0.2.3
 
 * [TT-3117] Fix: NoMethodError when subject is not linkable
 
