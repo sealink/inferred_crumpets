@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## Unreleased
+
+* [TT-3117] Fix: NoMethodError when subject is not linkable
+
 ## 0.2.2
 
 * [TT-3102] Fix: Show subject crumb even when action is not linkable
