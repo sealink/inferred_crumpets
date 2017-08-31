@@ -54,13 +54,13 @@ module InferredCrumpets
     def build_crumb_for_action!
       return unless subject.is_a?(ActiveRecord::Base)
 
-      if %w(new create).include?(action) && linkable?
+      if %w(new create).include?(action)
         view_context.crumbs.add_crumb('New', wrapper_options: { class: 'active' })
         return
       end
 
       build_crumb_for_subject!
-      if %w(edit update).include?(action) && linkable?
+      if %w(edit update).include?(action)
         view_context.crumbs.add_crumb('Edit', wrapper_options: { class: 'active' })
       end
     end
@@ -70,7 +70,7 @@ module InferredCrumpets
     end
 
     def url_for_subject
-      return unless can_route?(:show, id: subject.id)
+      return unless can_route?(:show, id: subject.id) && linkable?
       view_context.url_for(shallow? ? transformed_subject : subject_with_parents)
     end
 
