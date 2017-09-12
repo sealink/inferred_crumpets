@@ -72,7 +72,7 @@ module InferredCrumpets
 
     def url_for_subject
       return unless can_route?(:show, id: subject.id) && linkable?
-      view_context.url_for(linkable? ? transformed_subject : subject_with_parents)
+      view_context.url_for(transformed_subject)
     end
 
     def url_for_collection
@@ -111,10 +111,6 @@ module InferredCrumpets
 
     def class_with_parents
       (parents + [transformed_subject.class]).compact
-    end
-
-    def subject_with_parents
-      (parents + [transformed_subject]).compact
     end
 
     def inherited_resources?
