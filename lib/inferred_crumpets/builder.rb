@@ -78,7 +78,8 @@ module InferredCrumpets
     def url_for_collection
       return view_context.objects_path if view_context.objects_path.present?
       return unless can_route?(:index)
-      view_context.url_for(linkable? ? transformed_subject.class : class_with_parents)
+      return view_context.url_for(transformed_subject.class) if linkable?
+      return view_context.url_for(class_with_parents) if parents_and_class_linkable?
     end
 
     def subject_requires_transformation?
@@ -95,6 +96,10 @@ module InferredCrumpets
 
     def parents_and_subject_linkable?
       @route_checker.linkable?((parents + [subject.class]).compact)
+    end
+
+    def parents_and_class_linkable?
+      @route_checker.linkable?((parents + [transformed_subject.class]).compact)
     end
 
     def can_route?(action, params = {})
