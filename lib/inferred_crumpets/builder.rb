@@ -18,9 +18,10 @@ module InferredCrumpets
     end
 
     def initialize(view_context, subject, parents = [])
-      @view_context = view_context
-      @subject      = subject
-      @parents      = parents
+      @route_checker  = RouteChecker.new(view_context)
+      @view_context   = view_context
+      @subject        = subject
+      @parents        = parents
     end
 
     def build_all!
@@ -81,9 +82,7 @@ module InferredCrumpets
     end
 
     def subject_requires_transformation?
-      subject.respond_to?(:becomes) && view_context.url_for((parents + [subject.class]).compact).blank?
-    rescue NoMethodError
-      true
+      subject.respond_to?(:becomes) && !parents_and_subject_linkable?
     end
 
     def transformed_subject
@@ -91,24 +90,19 @@ module InferredCrumpets
     end
 
     def shallow?
-      view_context.url_for(transformed_subject)
-    rescue NoMethodError
-      false
+      @route_checker.linkable?(transformed_subject)
     end
 
     def linkable?
-      view_context.url_for(subject)
-    rescue NoMethodError
-      false
+      @route_checker.linkable?(subject)
+    end
+
+    def parents_and_subject_linkable?
+      @route_checker.linkable?((parents + [subject.class]).compact)
     end
 
     def can_route?(action, params = {})
-      view_context.url_for({
-        action:     action,
-        controller: subject.class.table_name,
-      }.merge(params))
-    rescue ActionController::RoutingError
-      false
+      @route_checker.can_route?(subject, action, params)
     end
 
     def action
