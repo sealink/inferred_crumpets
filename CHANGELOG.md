@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## Unreleased
+## 0.2.4
 
 * [TT-3102] Move url checking out into seperate class
 * [TT-3102] Fix regression where subject routes where not build properly
