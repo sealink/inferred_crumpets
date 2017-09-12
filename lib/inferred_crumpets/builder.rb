@@ -18,9 +18,10 @@ module InferredCrumpets
     end
 
     def initialize(view_context, subject, parents = [])
-      @view_context = view_context
-      @subject      = subject
-      @parents      = parents
+      @route_checker  = RouteChecker.new(view_context)
+      @view_context   = view_context
+      @subject        = subject
+      @parents        = parents
     end
 
     def build_all!
@@ -42,7 +43,7 @@ module InferredCrumpets
     end
 
     def build_crumb_for_collection!
-      return if parents.present? && shallow?
+      return if parents.present? && linkable?
 
       if subject.is_a?(ActiveRecord::Relation)
         view_context.crumbs.add_crumb subject_name.pluralize.titleize
@@ -71,44 +72,38 @@ module InferredCrumpets
 
     def url_for_subject
       return unless can_route?(:show, id: subject.id) && linkable?
-      view_context.url_for(shallow? ? transformed_subject : subject_with_parents)
+      view_context.url_for(transformed_subject)
     end
 
     def url_for_collection
       return view_context.objects_path if view_context.objects_path.present?
       return unless can_route?(:index)
-      view_context.url_for(shallow? ? transformed_subject.class : class_with_parents)
+      return view_context.url_for(transformed_subject.class) if linkable?
+      return view_context.url_for(class_with_parents) if parents_and_class_linkable?
     end
 
     def subject_requires_transformation?
-      subject.respond_to?(:becomes) && view_context.url_for((parents + [subject.class]).compact).blank?
-    rescue NoMethodError
-      true
+      subject.respond_to?(:becomes) && !parents_and_subject_linkable?
     end
 
     def transformed_subject
       subject_requires_transformation? ? subject.becomes(subject.class.base_class) : subject
     end
 
-    def shallow?
-      view_context.url_for(transformed_subject)
-    rescue NoMethodError
-      false
+    def linkable?
+      @route_checker.linkable?(transformed_subject)
     end
 
-    def linkable?
-      view_context.url_for(subject)
-    rescue NoMethodError
-      false
+    def parents_and_subject_linkable?
+      @route_checker.linkable?((parents + [subject.class]).compact)
+    end
+
+    def parents_and_class_linkable?
+      @route_checker.linkable?((parents + [transformed_subject.class]).compact)
     end
 
     def can_route?(action, params = {})
-      view_context.url_for({
-        action:     action,
-        controller: subject.class.table_name,
-      }.merge(params))
-    rescue ActionController::RoutingError
-      false
+      @route_checker.can_route?(subject, action, params)
     end
 
     def action
@@ -121,10 +116,6 @@ module InferredCrumpets
 
     def class_with_parents
       (parents + [transformed_subject.class]).compact
-    end
-
-    def subject_with_parents
-      (parents + [transformed_subject]).compact
     end
 
     def inherited_resources?
