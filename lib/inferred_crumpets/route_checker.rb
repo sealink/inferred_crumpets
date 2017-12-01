@@ -15,7 +15,9 @@ module InferredCrumpets
         action:     action,
         controller: subject.class.table_name,
       }.merge(params))
-    rescue ActionController::RoutingError
+    rescue ActionController::RoutingError # Rails 3
+      false
+    rescue ActionController::UrlGenerationError # Rails 4+
       false
     end
   end

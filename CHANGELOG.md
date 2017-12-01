@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## Unreleased
+
+* [RU-145] Check for the Rails 5 ActionController::UrlGenerationError
+
 ## 0.2.4
 
 * [TT-3102] Move url checking out into seperate class
