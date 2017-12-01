@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## Unreleased
+## 0.2.5
 
 * [RU-145] Check for the Rails 5 ActionController::UrlGenerationError
 
