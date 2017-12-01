@@ -17,6 +17,8 @@ module InferredCrumpets
       }.merge(params))
     rescue ActionController::RoutingError
       false
+    rescue ActionController::UrlGenerationError
+      false
     end
   end
 end
