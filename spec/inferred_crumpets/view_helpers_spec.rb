@@ -365,6 +365,7 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         let(:parent_and_collection_linkable) { true }
         let(:parent_class_linkable) { true }
         let(:subject_class_linkable) { true }
+        let(:parent_object) { parent }
 
         before do
           allow(parent).to receive(:id).and_return(1)
@@ -379,7 +380,40 @@ RSpec.describe InferredCrumpets::ViewHelpers do
           allow(view_context).to receive(:url_for).with(parent).and_return('/organisations/1')
           allow(view_context).to receive(:url_for).with([parent, Person]).and_return('/organisations/1/people')
           allow(view_context).to receive(:url_for).with([parent, User]).and_return('/organisations/1/users')
-          allow(view_context).to receive(:parent_object).and_return(parent)
+          allow(view_context).to receive(:parent_object).and_return(parent_object)
+        end
+
+        context 'with grandparents defined in view object' do
+          let(:parent_object) { [grandparent, parent] }
+          let(:grandparent) { Organisation.new }
+
+          before do
+            allow(grandparent).to receive(:id).and_return(2)
+            allow(grandparent).to receive(:to_s).and_return('The Board')
+
+            allow(route_checker).to receive(:linkable?).with([Organisation, Organisation, User]).and_return parent_and_collection_linkable
+
+            allow(view_context).to receive(:url_for).with(grandparent).and_return('/organisations/2')
+            allow(view_context).to receive(:url_for).with([grandparent, Person]).and_return('/organisations/2/people')
+          end
+
+          let(:subject_linkable) { false }
+
+          context 'on index route' do
+            let(:action) { 'show' }
+
+            it 'should infer crumbs: The Board / Sealink Travel Group / Users / Alice ' do
+              expect(subject).to eq '<ul class="breadcrumb"><li><a href="/organisations/2">The Board</a></li><li><a href="/organisations/1">Sealink Travel Group</a></li><li><a href="/organisations/1/users">Users</a></li><li><span>Alice</span></li></ul>'
+            end
+          end
+
+          context 'on edit route' do
+            let(:action) { 'edit' }
+
+            it 'should infer crumbs: The Board / Sealink Travel Group / Users / Alice / Edit' do
+              expect(subject).to eq '<ul class="breadcrumb"><li><a href="/organisations/2">The Board</a></li><li><a href="/organisations/1">Sealink Travel Group</a></li><li><a href="/organisations/1/users">Users</a></li><li><span>Alice</span></li><li class="active"><span>Edit</span></li></ul>'
+            end
+          end
         end
 
         context 'when not shallow' do
