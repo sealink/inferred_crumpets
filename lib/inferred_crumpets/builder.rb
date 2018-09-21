@@ -5,7 +5,7 @@ module InferredCrumpets
     def self.build_inferred_crumbs!(view_context)
       subject = view_context.current_object rescue view_context.collection rescue nil
       return unless subject
-      parents = [view_context.parent_object].compact rescue []
+      parents = [view_context.parent_object].compact.flatten rescue []
       build_all!(view_context, subject, parents)
     end
 
@@ -115,7 +115,7 @@ module InferredCrumpets
     end
 
     def class_with_parents
-      (parents + [transformed_subject.class]).compact
+      [parents.last, transformed_subject.class].compact
     end
 
     def inherited_resources?
