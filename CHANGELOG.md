@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## Unreleased
+## 0.2.6
 
 * [TT-4479] Added grandparent support
 
