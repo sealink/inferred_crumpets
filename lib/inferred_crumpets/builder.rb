@@ -115,7 +115,7 @@ module InferredCrumpets
     end
 
     def class_with_parents
-      (parents.last(1) + [transformed_subject.class]).compact
+      [parents.last, transformed_subject.class].compact
     end
 
     def inherited_resources?
