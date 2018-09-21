@@ -31,7 +31,7 @@ module InferredCrumpets
     end
 
     def build_single!
-      build_crumb_for_subject! if url_for_subject.present?
+      build_crumb_for_subject!
     end
 
     private
