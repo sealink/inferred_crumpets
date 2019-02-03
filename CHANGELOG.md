@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## Unreleased
+
+* [TT-5087] Add parent to be displayed on index routes
+
 ## 0.2.6
 
 * [TT-4479] Added grandparent support
