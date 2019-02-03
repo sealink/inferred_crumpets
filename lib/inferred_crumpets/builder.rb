@@ -61,7 +61,7 @@ module InferredCrumpets
       end
 
       build_crumb_for_subject!
-      if %w(edit update).include?(action)
+      if %w(edit update show_details).include?(action)
         view_context.crumbs.add_crumb('Edit', wrapper_options: { class: 'active' })
       end
     end

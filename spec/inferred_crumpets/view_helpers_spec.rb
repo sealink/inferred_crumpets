@@ -154,8 +154,16 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         end
       end
 
-      context 'on show route' do
+      context 'on edit route' do
         let(:action) { 'edit' }
+
+        it 'should infer crumbs: Users / Alice / Edit ' do
+          expect(subject).to eq '<ul class="breadcrumb"><li><a href="/users">Users</a></li><li><a href="/users/1">Alice</a></li><li class="active"><span>Edit</span></li></ul>'
+        end
+      end
+
+      context 'on show_details route' do
+        let(:action) { 'show_details' }
 
         it 'should infer crumbs: Users / Alice / Edit ' do
           expect(subject).to eq '<ul class="breadcrumb"><li><a href="/users">Users</a></li><li><a href="/users/1">Alice</a></li><li class="active"><span>Edit</span></li></ul>'
