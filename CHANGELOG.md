@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+##  Unreleased
+
+* [TT-5088] Add ability to link to all actions
+
 ## 0.2.6
 
 * [TT-4479] Added grandparent support
