@@ -1,5 +1,10 @@
 # InferredCrumpets
 
+## 0.3.0
+
+* [TT-5067] Determine subject when current_object is nil but collection is defined
+* [TT-5067] Alias show_details as edit
+
 ## 0.2.5
 
 * [RU-145] Check for the Rails 5 ActionController::UrlGenerationError
