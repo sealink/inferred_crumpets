@@ -54,16 +54,13 @@ module InferredCrumpets
 
     def build_crumb_for_action!
       return unless subject.is_a?(ActiveRecord::Base)
+      crumb = ActionProcessor.for_action(action)
+      build_crumb_for_subject! if crumb.has_subject?
+      add_crumb(crumb.label) if crumb.label.present?
+    end
 
-      if %w(new create).include?(action)
-        view_context.crumbs.add_crumb('New', wrapper_options: { class: 'active' })
-        return
-      end
-
-      build_crumb_for_subject!
-      if %w(edit update).include?(action)
-        view_context.crumbs.add_crumb('Edit', wrapper_options: { class: 'active' })
-      end
+    def add_crumb(label)
+      view_context.crumbs.add_crumb(label, wrapper_options: { class: 'active' })
     end
 
     def build_crumb_for_subject!
