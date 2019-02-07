@@ -124,6 +124,14 @@ RSpec.describe InferredCrumpets::ViewHelpers do
           expect(subject).to eq '<ul class="breadcrumb"><li><a href="/users">Users</a></li><li><a href="/users/1">Alice</a></li><li class="active"><span>Edit</span></li></ul>'
         end
       end
+
+      context 'with a custom action' do
+        let(:action) { 'show_details' }
+
+        it 'should infer crumbs: Users / Alice / Show details' do
+          expect(subject).to eq '<ul class="breadcrumb"><li><a href="/users">Users</a></li><li><a href="/users/1">Alice</a></li><li class="active"><span>Show details</span></li></ul>'
+        end
+      end
     end
 
     context 'when can route to action but subject is not linkable' do
@@ -154,7 +162,7 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         end
       end
 
-      context 'on show route' do
+      context 'on edit route' do
         let(:action) { 'edit' }
 
         it 'should infer crumbs: Users / Alice / Edit ' do
