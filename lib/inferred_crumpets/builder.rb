@@ -3,7 +3,7 @@ module InferredCrumpets
     attr_reader :view_context, :subject, :parents
 
     def self.build_inferred_crumbs!(view_context)
-      subject = view_context.current_object rescue view_context.collection rescue nil
+      subject = SubjectFinder.for_context(view_context)
       return unless subject
       parents = [view_context.parent_object].compact.flatten rescue []
       build_all!(view_context, subject, parents)
