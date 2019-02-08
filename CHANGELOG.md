@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## Unreleased
+## 0.3.0
 
 * [TT-5087] Add parent to be displayed on index routes
 * [TT-5088] Add ability to link to all actions
