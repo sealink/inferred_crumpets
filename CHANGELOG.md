@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## Unreleased
+
+* [TT-5807] Use page title for the subject name
+
 ## 0.3.0
 
 * [TT-5087] Add parent to be displayed on index routes
