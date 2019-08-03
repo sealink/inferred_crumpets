@@ -67,13 +67,13 @@ RSpec.describe InferredCrumpets::ViewHelpers do
 
     before do
       allow(user_class).to receive(:table_name).and_return('users')
-      allow(user_class).to receive(:page_title).and_return(nil)
+      allow(user_class).to receive(:crumb_title).and_return(nil)
 
       allow(users).to receive(:class).and_return(user_class)
       allow(users).to receive(:to_s).and_return('User')
 
       allow(user).to receive(:id).and_return(id)
-      allow(user).to receive(:page_title).and_return(nil)
+      allow(user).to receive(:crumb_title).and_return(nil)
       allow(user).to receive(:to_s).and_return('Alice')
       allow(user).to receive(:new_record?).and_return(new_record)
       allow(user).to receive(:class).and_return(user_class)

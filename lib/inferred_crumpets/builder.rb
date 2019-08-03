@@ -108,7 +108,7 @@ module InferredCrumpets
     end
 
     def subject_name
-      subject.respond_to?(:page_title) && subject.page_title.present? ? subject.page_title : subject.to_s
+      subject.respond_to?(:crumb_title) && subject.crumb_title.present? ? subject.crumb_title : subject.to_s
     end
 
     def class_with_parents

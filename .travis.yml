@@ -1,7 +1,10 @@
-sudo: false
 language: ruby
 rvm:
   - 2.4
   - 2.5
   - 2.6
-before_install: gem install
+before_install:
+  - gem install bundler
+notifications:
+  email:
+    - support@travellink.com.au

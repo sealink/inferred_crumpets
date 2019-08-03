@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* [TT-5807] Use page title for the subject name
+* [TT-5807] Use crumb title for the subject name
 
 ## 0.3.0
 
