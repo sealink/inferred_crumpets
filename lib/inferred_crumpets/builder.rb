@@ -46,7 +46,7 @@ module InferredCrumpets
       return if parents.present? && linkable?
 
       if subject.is_a?(ActiveRecord::Relation)
-        view_context.crumbs.add_crumb subject_name.pluralize.titleize
+        view_context.crumbs.add_crumb relation_name.pluralize.titleize
       elsif subject.is_a?(ActiveRecord::Base)
         view_context.crumbs.add_crumb subject.class.table_name.titleize, url_for_collection
       end
@@ -105,6 +105,10 @@ module InferredCrumpets
 
     def action
       view_context.params[:action]
+    end
+
+    def relation_name
+      subject.respond_to?(:name) && subject.name.present? ? subject.name : subject.to_s
     end
 
     def subject_name
