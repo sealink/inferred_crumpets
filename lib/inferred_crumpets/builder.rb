@@ -114,9 +114,5 @@ module InferredCrumpets
     def class_with_parents
       [parents.last, transformed_subject.class].compact
     end
-
-    def inherited_resources?
-      defined?(InheritedResources) && view_context.controller.responder == InheritedResources::Responder
-    end
   end
 end
