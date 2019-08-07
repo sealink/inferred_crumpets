@@ -70,7 +70,7 @@ RSpec.describe InferredCrumpets::ViewHelpers do
       allow(user_class).to receive(:crumb_title).and_return(nil)
 
       allow(users).to receive(:class).and_return(user_class)
-      allow(users).to receive(:to_s).and_return('User')
+      allow(users).to receive(:name).and_return('Users')
 
       allow(user).to receive(:id).and_return(id)
       allow(user).to receive(:crumb_title).and_return(nil)

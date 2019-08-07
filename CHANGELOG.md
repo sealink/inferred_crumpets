@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## Unreleased
+
+* [TT-5835] Fix crumb title for active record relation
+
 ## 0.4.0
 
 * [TT-5807] Use crumb title for the subject name
