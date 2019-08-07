@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## Unreleased
+## 0.4.1
 
 * [TT-5835] Fix crumb title for active record relation
 
