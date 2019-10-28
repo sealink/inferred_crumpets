@@ -48,7 +48,7 @@ module InferredCrumpets
       if subject.is_a?(ActiveRecord::Relation)
         view_context.crumbs.add_crumb relation_name.pluralize.titleize
       elsif subject.is_a?(ActiveRecord::Base)
-        crumb_name = subject.class.respond_to?(:breadcrumb) ? subject.class.breadcrumb : subject.class.table_name.titleize
+        crumb_name = subject.class.respond_to?(:collection_title) ? subject.class.collection_title : subject.class.table_name.titleize
         view_context.crumbs.add_crumb crumb_name, url_for_collection
       end
     end
