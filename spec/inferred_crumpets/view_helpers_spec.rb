@@ -505,5 +505,33 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         end
       end
     end
+
+    context 'when the subject has a collection_title' do
+      let(:action) { 'new' }
+      let(:new_record) { true }
+
+      before do
+        allow(view_context).to receive(:collection).and_return(users)
+        allow(view_context).to receive(:current_object).and_return(user)
+        allow(user_class).to receive(:collection_title).and_return('Special Collection Title')
+      end
+
+      it 'should display the collection title' do
+        expect(subject).to eq '<ul class="breadcrumb"><li><a href="/users">Special Collection Title</a></li><li class="active"><span>New</span></li></ul>'
+      end
+    end
+
+    context 'for a relation with collection_title' do
+      let(:action) { 'index' }
+
+      before do
+        allow(view_context).to receive(:collection).and_return(users)
+        allow(User).to receive(:collection_title).and_return('Another Special Collection Title')
+      end
+
+      it 'display the collection title' do
+        expect(subject).to eq '<ul class="breadcrumb"><li><span>Another Special Collection Title</span></li></ul>'
+      end
+    end
   end
 end

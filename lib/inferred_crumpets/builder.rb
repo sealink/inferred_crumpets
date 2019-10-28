@@ -45,7 +45,9 @@ module InferredCrumpets
     def build_crumb_for_collection!
       return if parents.present? && linkable?
 
-      if subject.is_a?(ActiveRecord::Relation)
+      if subject.class.respond_to?(:collection_title)
+        view_context.crumbs.add_crumb subject.class.collection_title, url_for_collection
+      elsif subject.is_a?(ActiveRecord::Relation)
         view_context.crumbs.add_crumb relation_name.pluralize.titleize
       elsif subject.is_a?(ActiveRecord::Base)
         view_context.crumbs.add_crumb subject.class.table_name.titleize, url_for_collection
