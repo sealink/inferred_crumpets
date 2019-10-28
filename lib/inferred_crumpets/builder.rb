@@ -46,10 +46,9 @@ module InferredCrumpets
       return if parents.present? && linkable?
 
       if subject.is_a?(ActiveRecord::Relation)
-        view_context.crumbs.add_crumb relation_name.pluralize.titleize
+        view_context.crumbs.add_crumb collection_title_crumb_name(subject, relation_name.pluralize.titleize)
       elsif subject.is_a?(ActiveRecord::Base)
-        crumb_name = subject.class.respond_to?(:collection_title) ? subject.class.collection_title : subject.class.table_name.titleize
-        view_context.crumbs.add_crumb crumb_name, url_for_collection
+        view_context.crumbs.add_crumb collection_title_crumb_name(subject, subject.class.table_name.titleize), url_for_collection
       end
     end
 
@@ -118,6 +117,10 @@ module InferredCrumpets
 
     def class_with_parents
       [parents.last, transformed_subject.class].compact
+    end
+
+    def collection_title_crumb_name(subject, default_name)
+      subject.class.respond_to?(:collection_title) ? subject.class.collection_title : default_name
     end
   end
 end
