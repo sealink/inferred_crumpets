@@ -529,7 +529,7 @@ RSpec.describe InferredCrumpets::ViewHelpers do
         allow(User).to receive(:collection_title).and_return('Another Special Collection Title')
       end
 
-      it 'should infer crumbs: Users' do
+      it 'display the collection title' do
         expect(subject).to eq '<ul class="breadcrumb"><li><span>Another Special Collection Title</span></li></ul>'
       end
     end
