@@ -1,6 +1,6 @@
 # InferredCrumpets
 
-## 0.4.2 Unreleased
+## 0.4.2
 
 * [TT-6224] ActiveRecord::Base subjects can now take a custom crumb name
 
