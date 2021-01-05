@@ -1,6 +1,7 @@
 # InferredCrumpets
 
-[![Build Status](https://travis-ci.org/sealink/inferred_crumpets.svg?branch=master)](https://travis-ci.org/sealink/inferred_crumpets)
+[![Gem Version](https://badge.fury.io/rb/inferred_crumpets.svg)](http://badge.fury.io/rb/inferred_crumpets)
+[![Build Status](https://github.com/sealink/inferred_crumpets/workflows/Build%20and%20Test/badge.svg?branch=master)](https://github.com/sealink/inferred_crumpets/actions)
 
 Automatic breadcrumbs for Rails. Built with [crumpet](https://github.com/blaknite/crumpet).
 
@@ -24,10 +25,21 @@ In the view call `render_inferred_crumbs`
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
+## Release
+
+To publish a new version of this gem the following steps must be taken.
+
+* Update the version in the following files
+  ```
+    CHANGELOG.md
+    lib/inferred_crumpets/version.rb
+  ````
+* Create a tag using the format v0.1.0
+* Follow build progress in GitHub actions
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/sealink/inferred_crumpets. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
 
 ## License
 
