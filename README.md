@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/inferred_crumpets.svg)](http://badge.fury.io/rb/inferred_crumpets)
 [![Build Status](https://github.com/sealink/inferred_crumpets/workflows/Build%20and%20Test/badge.svg?branch=master)](https://github.com/sealink/inferred_crumpets/actions)
+[![Coverage Status](https://coveralls.io/repos/github/sealink/inferred_crumpets/badge.svg?branch=master)](https://coveralls.io/github/sealink/inferred_crumpets?branch=master)
 
 Automatic breadcrumbs for Rails. Built with [crumpet](https://github.com/blaknite/crumpet).
 

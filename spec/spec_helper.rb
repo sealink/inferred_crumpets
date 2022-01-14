@@ -2,6 +2,7 @@ require "bundler/setup"
 require "rails"
 require "action_controller"
 require "action_view"
+require 'support/coverage_loader'
 require "crumpet"
 require "inferred_crumpets"
 
