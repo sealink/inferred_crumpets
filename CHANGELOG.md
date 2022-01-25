@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## 0.6.0
+
+- [PLAT-183] Ruby 3.1, coveralls via github actions
+
 ## 0.5.0
 
 - [TT-8631] Update to build with github actions / ruby 3.0 / rails 6.1
