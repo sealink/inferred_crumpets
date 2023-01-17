@@ -1,5 +1,9 @@
 # InferredCrumpets
 
+## Unreleased
+
+- [PLAT-1175] Update to Ruby 3.2
+
 ## 0.6.0
 
 - [PLAT-183] Ruby 3.1, coveralls via github actions
