@@ -51,9 +51,9 @@ RSpec.describe InferredCrumpets::ViewHelpers do
     allow(view_context).to receive(:controller) { double(:controller, :show => nil) }
     allow(view_context).to receive(:url_for).with(user_class).and_return('/users')
     allow(view_context).to receive(:url_for).with(users).and_return('/users')
-    allow(view_context).to receive(:url_for).with(action: :index, controller: 'users').and_return('/users')
+    allow(view_context).to receive(:url_for).with({action: :index, controller: 'users'}).and_return('/users')
     allow(view_context).to receive(:url_for).with(user).and_return('/users/1')
-    allow(view_context).to receive(:url_for).with(action: :show, controller: 'users', id: 1).and_return('/users/1')
+    allow(view_context).to receive(:url_for).with({action: :show, controller: 'users', id: 1}).and_return('/users/1')
     allow(view_context).to receive(:url_for).with([user.class]).and_return('/users')
   end
 
